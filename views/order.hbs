@@ -1,0 +1,33 @@
+<div class="card mt-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h1 class="mr-auto">{{order.title}}</h1>
+        <span class="fs-4">@{{user.username}}</span>
+    </div>
+    <div class="card-body">
+        {{#if order.image}}
+        <img src="/uploads/{{order.image}}" alt="{{order.title}}" class="img-fluid mb-3">
+        {{/if}}
+        <p class="card-text">{{order.description}}</p>
+        <p class="card-text"><strong>Price:</strong> ${{order.price}}</p>
+        <button class="btn btn-success">Complete Order</button>
+
+        {{#if isAdmin}}
+        <a href="/orders/edit/{{order.id}}" class="btn btn-warning">Edit Order</a>
+        <button type="button" id="deleteButton" class="btn btn-danger">Delete Order</button>
+        {{/if}}
+    </div>
+</div>
+
+<script>
+    window.onload = function () {
+        $('#deleteButton').on('click', function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'DELETE',
+                url: '/orders/{{order.id}}',
+                success: () => window.location.href = '/orders',
+                error: () => alert('Error deleting order')
+            });
+        });
+    };
+</script>

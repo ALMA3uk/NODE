@@ -1,0 +1,41 @@
+<h1>Edit Order</h1>
+<form id="editOrderForm" enctype="multipart/form-data" class="mt-4">
+    <div class="mb-3">
+        <label for="title" class="form-label">Title:</label>
+        <input type="text" id="title" name="title" class="form-control" value="{{order.title}}" required>
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Description:</label>
+        <textarea id="description" name="description" class="form-control" rows="4"
+            required>{{order.description}}</textarea>
+    </div>
+    <div class="mb-3">
+        <label for="price" class="form-label">Price:</label>
+        <input type="number" id="price" name="price" class="form-control" value="{{order.price}}" required>
+    </div>
+    <div class="mb-3">
+        <label for="image" class="form-label">New Image:</label>
+        <div class="input-group">
+            <input type="file" id="image" name="image" class="form-control">
+            <input type="hidden" id="oldImage" name="oldImage" value="{{order.image}}">
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Update Order</button>
+</form>
+
+<script>
+    window.onload = function () {
+        $('#editOrderForm').on('submit', function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: '/orders/{{order.id}}',
+                type: 'PUT',
+                data: new FormData(this),
+                contentType: false,
+                processData: false,
+                success: () => window.location.href = '/orders/{{order.id}}',
+                error: () => alert('Error updating order')
+            });
+        });
+    };
+</script>
