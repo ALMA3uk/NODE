@@ -131,3 +131,7 @@ dist
 
 # Uploaded pictures
 public/uploads/
+
+# Development files
+*.bat
+task.txt
