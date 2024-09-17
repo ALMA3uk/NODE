@@ -7,27 +7,34 @@ exports.register = (req, res) => {
     res.render('register', { title: 'Register' });
 };
 
-// Регистрация
-exports.postRegister = async (req, res) => {
-    const { username, password } = req.body;
+// Регистрация в БД
+exports.registerUser = async (username, password) => {
     try {
         const user = await User.findOne({ where: { username } });
-        if (user) {
-            req.flash('error_msg', 'Username already exists');
-            return res.redirect('/register');
-        }
+        if (user) { throw new Error('Username already exists'); }
 
         const salt = await bcrypt.genSalt(10);
         const hash = await bcrypt.hash(password, salt);
         await User.create({ username, password: hash });
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+};
 
+// Регистрация
+exports.postRegister = async (req, res) => {
+    const { username, password } = req.body;
+    try {
+        await exports.registerUser(username, password);
         passport.authenticate('local', {
             successRedirect: '/orders',
             failureRedirect: '/register',
             failureFlash: true
         })(req, res);
     } catch (err) {
-        console.log(err);
+        req.flash('error_msg',);
+        return res.redirect('/register');
     }
 };
 
@@ -52,4 +59,3 @@ exports.logout = (req, res) => {
         res.redirect('/orders');
     });
 };
-
