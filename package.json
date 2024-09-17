@@ -4,15 +4,13 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node app",
-    "test": "mocha *.test.js"
+    "start": "node app"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "bootstrap": "^5.3.3",
     "connect-flash": "^0.1.1",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
