@@ -44,13 +44,15 @@ app.use('/orders', require('./routes/orderRouter'));
 
 app.use((req, res) => { res.status(404).render('404', { message: 'Page Not Found' }); });
 
-process.on('SIGINT', () => { process.exit(); }).on('SIGTERM', () => {
+process.on('SIGINT', () => {
+    sequelize.close().then(() => { process.exit(); });
+}).on('SIGTERM', () => {
     sequelize.close().then(() => { process.exit(); });
 });
 
-const port = process.env.PORT || 3000;
 sequelize.sync({ force: false }).then(() => {
-    app.listen(port, () => {
-        console.log(`Server is running on http://localhost:${port}`);
+    if (process.env.NODE_ENV === 'development') { require('./utils/createAdmin')(); }
+    app.listen(3000, () => {
+        console.log(`Server is running on http://localhost:3000/orders`);
     });
 });
